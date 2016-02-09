@@ -141,41 +141,40 @@ public class FormularioController {
 		List<Produto> produtos = new ArrayList<Produto>();
 		try{
 			Usuario usuario = usuarioService.consultarPorID(formBean.getId());
-//			usuario.setStatusRecomendacao("P");
-//			usuarioService.salvar(usuario);
-//			System.out.println("Realizando chamada no spark... UserId:" + formBean.getId());
-//			
-//			System.setProperty("user.name", "vagrant"); 
-//			Runtime rt = Runtime.getRuntime();
-//            Process proc = rt.exec( 
-//					new String[]{ "/home/vagrant/packages/spark-1.4.1-bin-hadoop2.6/bin/spark-submit", "/vagrant/machine-learning-module/make_prediction.py", formBean.getId()} );
-//            InputStream stderr = proc.getErrorStream();
-//            InputStreamReader isr = new InputStreamReader(stderr);
-//            BufferedReader br = new BufferedReader(isr);
-//            String line = null;
-//            System.out.println("################ SPARK ###############");
-//            while ( (line = br.readLine()) != null)
-//                System.out.println(line);
-//            System.out.println("################ SPARK ###############");
-//            int exitVal = proc.waitFor();
-//            System.out.println("Process exitValue: " + exitVal);
-//						
-//			boolean success = false;
-//			int tentativas = 0; 
-//			while (tentativas < 20) {
-//				System.out.println("Tentativa " + tentativas);
-//				usuario = usuarioService.consultarPorID(formBean.getId());
-//				if("F".equals(usuario.getStatusRecomendacao())){
-//					success = true;
-//					break;
-//				}
-//				tentativas++;
-//				Thread.sleep(5 * 1000);
-//			}
-//			
-//			System.out.println("Todas tentativas realizadas! Sucesso? " + success);
-//			if(success)
-				produtos.addAll(produtoService.buscarProdutosRecomendadosParaUsuario(usuario.getId()));
+			usuario.setStatusRecomendacao("P");
+			usuarioService.salvar(usuario);
+			System.out.println("Realizando chamada no spark... UserId:" + formBean.getId());
+			
+			System.setProperty("user.name", "vagrant"); 
+			Runtime rt = Runtime.getRuntime();
+            Process proc = rt.exec( 
+					new String[]{ "/home/vagrant/packages/spark-1.4.1-bin-hadoop2.6/bin/spark-submit", "/vagrant/machine-learning-module/make_prediction.py", formBean.getId()} );
+            InputStream stderr = proc.getErrorStream();
+            InputStreamReader isr = new InputStreamReader(stderr);
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            System.out.println("################ SPARK ###############");
+            while ( (line = br.readLine()) != null)
+                System.out.println(line);
+            System.out.println("################ SPARK ###############");
+            int exitVal = proc.waitFor();
+            System.out.println("Process exitValue: " + exitVal);
+						
+			boolean success = false;
+			int tentativas = 0; 
+			while (tentativas < 20) {
+				System.out.println("Tentativa " + tentativas);
+				usuario = usuarioService.consultarPorID(formBean.getId());
+				if("F".equals(usuario.getStatusRecomendacao())){
+					success = true;
+					break;
+				}
+				tentativas++;
+				Thread.sleep(5 * 1000);
+			}
+			
+			System.out.println("Todas tentativas realizadas! Sucesso? " + success);
+			produtos.addAll(produtoService.buscarProdutosRecomendadosParaUsuario(usuario.getId()));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
