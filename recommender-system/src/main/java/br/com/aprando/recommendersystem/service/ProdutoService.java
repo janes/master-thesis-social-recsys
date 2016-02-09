@@ -24,5 +24,7 @@ public interface ProdutoService {
 	Set<Produto> buscarProdutosRecomendadosParaUsuario(String id);
 
 	List<Produto> buscarProdutosPopulares();
+	
+	void removerProdutosRecomendacao(String userId);
 
 }

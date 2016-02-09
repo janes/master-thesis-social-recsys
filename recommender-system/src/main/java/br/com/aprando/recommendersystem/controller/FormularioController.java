@@ -141,6 +141,7 @@ public class FormularioController {
 		List<Produto> produtos = new ArrayList<Produto>();
 		try{
 			Usuario usuario = usuarioService.consultarPorID(formBean.getId());
+			produtoService.removerProdutosRecomendacao(usuario.getId());
 			usuario.setStatusRecomendacao("P");
 			usuarioService.salvar(usuario);
 			System.out.println("Realizando chamada no spark... UserId:" + formBean.getId());
@@ -148,7 +149,7 @@ public class FormularioController {
 			System.setProperty("user.name", "vagrant"); 
 			Runtime rt = Runtime.getRuntime();
             Process proc = rt.exec( 
-					new String[]{ "/home/vagrant/packages/spark-1.4.1-bin-hadoop2.6/bin/spark-submit", "/vagrant/machine-learning-module/make_prediction.py", formBean.getId()} );
+					new String[]{ "/home/azureuser/master-thesis-social-recsys/spark-1.4.1-bin-hadoop2.6/bin/spark-submit", "/vagrant/machine-learning-module/make_prediction.py", formBean.getId()} );
             InputStream stderr = proc.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
             BufferedReader br = new BufferedReader(isr);

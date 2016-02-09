@@ -100,6 +100,12 @@ public class ProdutoServiceImpl implements ProdutoService {
 		return retorno;	
 	}
 
+	public void removerProdutosRecomendacao(String userId){
+		Query q = new Query();
+		q.addCriteria(Criteria.where("userId").is(userId));
+		mongoTemplate.remove(q, Recomendacao.class);
+	}
+	
 	@Override
 	public List<Produto> buscarProdutosPopulares() {
 //		Query q = new Query();
