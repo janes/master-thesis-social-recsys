@@ -152,11 +152,10 @@
 		      	    	}else if(data.twitterId == ''){
 		      	    		$("#msgTwitter").show()
 		      	    	}
-		      	    	//setTimeout(recuperarRecomendacoes(), 30000)
-		      	    	recuperarRecomendacoes();
+		      	    	setInterval(recuperarRecomendacoes(), 10000)		      	    	
 		      	    },
 		      	    error: function(data) { 
-		      	    	alert(data)
+		      	    	alert(data.statusText)
 		    		}
 		      	  });
 	    	  }
@@ -180,7 +179,7 @@
 	      	    	}
 	      	    },
 	      	    error: function(data) { 
-	      	    	alert(data)
+	      	    	alert(data.statusText)
 	    		}
 	      	  });
 		  }		  
@@ -198,28 +197,34 @@
 	      	    	$("#hrefFinalizar").show()
 	      	    },
 	      	    error: function(data) { 
-	      	    	alert(data)
+	      	    	alert(data.statusText)
 	    		}
 	      	  });
 		  }		  		  
 		  
-
+		  var recurandoRecomendacao = false;
 		  function recuperarRecomendacoes() {
-			  var data = $('#usuarioForm').serialize();
-	      	  $.ajax({
-		      	    url: '<c:url value="/formulario/recuperar-recomendacoes" />',
-		      	    data: data,
-		      	    dataType:'json',
-		      	    type:'POST', 
-		      	    async:true, 
-		      	    success: function(produtos) {
-		      	    	for ( var i = 0, l = produtos.length; i < l; i++ ) {
-		      	    		$( "#recomendacoes" ).append(replaceProduto(produtos[i], i));
-		      	    	}
-		      	    	$('[id^="rating-"]').barrating({ showSelectedRating:true });
-		      	    },error: function(data) { 
-		      	    	alert(data)
-		    	 }});
+			  if(!recurandoRecomendacao){
+				  recurandoRecomendacao = true
+				  $( "#recomendacoes" ).html('')
+				  var data = $('#usuarioForm').serialize();
+		      	  $.ajax({
+			      	    url: '<c:url value="/formulario/recuperar-recomendacoes" />',
+			      	    data: data,
+			      	    dataType:'json',
+			      	    type:'POST', 
+			      	    async:true, 
+			      	    success: function(produtos) {
+			      	    	recurandoRecomendacao = false
+			      	    	for ( var i = 0, l = produtos.length; i < l; i++ ) {
+			      	    		$( "#recomendacoes" ).append(replaceProduto(produtos[i], i));
+			      	    	}
+			      	    	$('[id^="rating-"]').barrating({ showSelectedRating:true });
+			      	    },error: function(data) { 
+			      	    	recurandoRecomendacao = false
+			      	    	alert(data.statusText)
+			    	 }});
+			  }
 		  	}
 
 		  		  
@@ -260,7 +265,7 @@
 					+'</article>																';
 	
 				
-				var imagem = ((produto.imagemGrande) ? produto.imagemGrande : produto.imagem) ;
+				var imagem = produto.image;
 				var descricao = ((produto.descricaoLonga && produto.descricaoLonga.trim() != 'More information coming soon.') ? produto.descricaoLonga : produto.descricaoCurta);
 				
 				//Se nao possuir imagem ou descricao, pular imagem.

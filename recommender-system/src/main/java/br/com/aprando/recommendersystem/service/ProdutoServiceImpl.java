@@ -1,8 +1,13 @@
 package br.com.aprando.recommendersystem.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.math.stat.descriptive.summary.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -72,18 +77,27 @@ public class ProdutoServiceImpl implements ProdutoService {
 	}
 
 	@Override
-	public List<Produto> buscarProdutosRecomendadosParaUsuario(String id) {
+	public Set<Produto> buscarProdutosRecomendadosParaUsuario(String id) {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("userId").is(id));
 		List<Recomendacao> recomendacoes = mongoTemplate.find(q, Recomendacao.class);
-		List<Produto> produtos = new ArrayList<>();
-		if(recomendacoes != null && !recomendacoes.isEmpty()) {
-			for(Recomendacao rec : recomendacoes){
-				produtos.addAll(rec.getProducts());
-			}
+		if(recomendacoes == null || recomendacoes.isEmpty()) 
+			return new HashSet<>();
+			
+		List<Produto> produtos = new ArrayList();
+		for(Recomendacao rec : recomendacoes){	
+			produtos.addAll(rec.getProducts());
 		}
-		return produtos;
+		Collections.sort(produtos, new CustomComparator());
 		
+		if(produtos.size() > 30)
+			produtos = produtos.subList(0, 30);
+		
+		Set<Produto> retorno = new HashSet<>();
+		retorno.addAll(produtos);
+		for(Produto p : produtos)
+			System.out.println("PRODUTO " + p.getCosineSimilarity());
+		return retorno;	
 	}
 
 	@Override
@@ -93,5 +107,13 @@ public class ProdutoServiceImpl implements ProdutoService {
 //		return mongoTemplate.find(q, Produto.class);
 		return null;
 	}
+	
+	public class CustomComparator implements Comparator<Produto> {
+	    
+		@Override
+		public int compare(Produto o1, Produto o2) {
+			return o2.getCosineSimilarity().compareTo(o1.getCosineSimilarity());
+		}
+	}	
 
 }

@@ -2,6 +2,7 @@ package br.com.aprando.recommendersystem.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import br.com.aprando.recommendersystem.base.ServiceException;
 import br.com.aprando.recommendersystem.domain.Produto;
@@ -20,7 +21,7 @@ public interface ProdutoService {
 
 	int getTotalPaginas() throws RuntimeException;
 
-	List<Produto> buscarProdutosRecomendadosParaUsuario(String id);
+	Set<Produto> buscarProdutosRecomendadosParaUsuario(String id);
 
 	List<Produto> buscarProdutosPopulares();
 

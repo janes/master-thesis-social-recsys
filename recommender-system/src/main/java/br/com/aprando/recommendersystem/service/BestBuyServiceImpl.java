@@ -277,11 +277,11 @@ public class BestBuyServiceImpl implements BestBuyService {
 
 					field = product.get("image");
 					if (field != null && !field.isJsonNull())
-						produto.setImagem(field.getAsString());
+						produto.setImage(field.getAsString());
 
 					field = product.get("largeImage");
 					if (field != null && !field.isJsonNull())
-						produto.setImagemGrande(field.getAsString());
+						produto.setImage(field.getAsString());
 
 					field = product.get("shortDescription");
 					if (field != null && !field.isJsonNull())
