@@ -24,7 +24,7 @@ numMaxSuggestionsPerPost = 5
 numStarts = 5
 
 ############ INICIO BASE
-host = '192.168.33.10'
+host = 'localhost'
 port = 27017
 username = ''
 password = ''
@@ -314,7 +314,7 @@ def main(**kwargs):
     #classifier = Classifier(sc, 'NaiveBayes')
     #modelNaiveBayesCategory = classifier.getModel('/dados/models/naivebayes/category_new')
     #postsSpaceVectorRDD = classifier.createVectSpacePost(tfidfPostsRDD, tokens)
-    #predictions = postsSpaceVectorRDD.map(lambda p: modelNaiveBayesCategory.predict(p))
+    #predictions = postsSpaceVectorRDD.map(lambda p: (modelNaiveBayesCategory.predict(p[1]), p[0])).groupByKey().mapValues(list).collect()
     
     classifier = Classifier(sc, 'NaiveBayes')
     modelNaiveBayesSubcategory = classifier.getModel('/dados/models/naivebayes/subcategory_new')

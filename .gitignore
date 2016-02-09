@@ -1,8 +1,11 @@
 *.class
 
-*/*.pyc
+*.pyc
+*.gz
+*.tgz
 apache-tomcat-7.0.67/
 dumps
+spark-1.4.1-bin-hadoop2.6/
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

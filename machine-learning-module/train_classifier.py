@@ -24,6 +24,8 @@ def main(sc):
     print '####### Creating product rdd with {} product'.format(len(products))
     
     productRDD = sc.parallelize(products)
+    #productRDD, discardedProductRDD = entiryProductRDD.randomSplit([2, 8], seed=0L)
+   
 
     #### 2) Criadno o corpus de documento utilizando 
     corpusRDD = productRDD.map(lambda s: (s[0], word_tokenize(s[1].lower()), s[2], s[3])).map(lambda s: (s[0], [PorterStemmer().stem(x) for x in s[1] if x not in stpwrds], s[2], s[3] )).map(lambda s: (s[0], [x[0] for x in pos_tag(s[1]) if x[1] == 'NN' or x[1] == 'NNP'], s[2], s[3])).cache()
@@ -67,6 +69,6 @@ def main(sc):
     print 'it tooks %d seconds' % elap
 
 if __name__ == '__main__':
-    conf = SparkConf().setAppName(APP_NAME)
+    conf = (SparkConf().setAppName("RECSYS"))#.set("spark.driver.memory", "14G").set("spark.executor.memory", "14G").set("spark.python.worker.memory", "14G").set("spark.cores.max",8).set("spark.driver.extraJavaOptions", "-Xmx14G -Xms14G"))
     sc = SparkContext(conf=conf)
     main(sc)
