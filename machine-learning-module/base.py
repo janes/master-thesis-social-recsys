@@ -13,7 +13,7 @@ from Classifier import Classifier
 
 #general variables
 #MongoDB
-host = '192.168.33.10'
+host = 'localhost'
 port = 27017
 username = ''
 password = ''
