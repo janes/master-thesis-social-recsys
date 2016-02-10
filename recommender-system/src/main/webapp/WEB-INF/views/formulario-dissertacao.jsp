@@ -438,7 +438,7 @@
 				  <p>
 				  <img class="image" src="/recommender-system/resources/overflow/images/carregando.gif">
 				  </p>
-				  <p style="background-color: white;">Por favor, aguade... a recomendação esta sendo gerada! Caso demore mais do que 2 minutos, favor interromper o formulário e enviar e-mail para alan.prando@gmail.com.</p>
+				  <p style="background-color: white;">Por favor, aguade... a recomenda&#231;&#227;o esta sendo gerada! Caso demore mais do que 2 minutos, favor interromper o formul&#225;rio e enviar e-mail para alan.prando@gmail.com.</p>
 				  </section>
 				</article>
 				</div>
