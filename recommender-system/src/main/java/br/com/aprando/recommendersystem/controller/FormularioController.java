@@ -139,8 +139,12 @@ public class FormularioController {
 	@RequestMapping(value = "/recuperar-recomendacoes", method = RequestMethod.POST)
 	@ResponseBody public Produto[] recomendar(Usuario formBean, RedirectAttributes redirectAttrs) {
 		List<Produto> produtos = new ArrayList<Produto>();
+		Usuario usuario = null;
 		try{
-			Usuario usuario = usuarioService.consultarPorID(formBean.getId());
+			usuario = usuarioService.consultarPorID(formBean.getId());
+			if("P".equals(usuario.getStatusRecomendacao()))
+				return null;
+			
 			produtoService.removerProdutosRecomendacao(usuario.getId());
 			usuario.setStatusRecomendacao("P");
 			usuarioService.salvar(usuario);
@@ -180,6 +184,14 @@ public class FormularioController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		} finally {
+			try {
+				usuario.setStatusRecomendacao("F");
+				usuarioService.salvar(usuario);
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return produtos.toArray(new Produto[produtos.size()]);
 	}	

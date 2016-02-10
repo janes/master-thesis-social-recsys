@@ -428,7 +428,15 @@
 			<form name="avaliacoesForm" id="avaliacoesForm" action="${pageContext.request.contextPath}/formulario/salvar-avaliacoes" method="POST">
 				<input type="hidden" name="idUsuario" id="idUsuarioAvaliacao" />
 				
-				<div id="recomendacoes" style="display: none;">			
+				<div id="recomendacoes" style="display: none;">
+				<article id="por favor aguarde" class="container box style2">
+				  <section>
+				  <p>
+				  <img class="image" align="MIDDLE" src="/recommender-system/resources/overflow/images/carregando.gif" alt="">
+				  </p>
+				  <p style="background-color: white;">Por favor, aguade... a recomendação esta sendo gerada! Caso demore mais do que 2 minutos, favor interromper o formulário e enviar e-mail para alan.prando@gmail.com.</p>
+				  </section>
+				</article>
 				</div>
 			</form>
 			

@@ -90,8 +90,8 @@ public class ProdutoServiceImpl implements ProdutoService {
 		}
 		Collections.sort(produtos, new CustomComparator());
 		
-		if(produtos.size() > 30)
-			produtos = produtos.subList(0, 30);
+		if(produtos.size() > 15)
+			produtos = produtos.subList(0, 15);
 		
 		Set<Produto> retorno = new HashSet<>();
 		retorno.addAll(produtos);
