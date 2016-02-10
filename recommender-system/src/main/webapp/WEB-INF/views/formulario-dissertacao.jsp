@@ -205,8 +205,7 @@
 		  var recurandoRecomendacao = false;
 		  function recuperarRecomendacoes() {
 			  if(!recurandoRecomendacao){
-				  recurandoRecomendacao = true
-				  $( "#recomendacoes" ).html('')
+				  recurandoRecomendacao = true				  
 				  var data = $('#usuarioForm').serialize();
 		      	  $.ajax({
 			      	    url: '<c:url value="/formulario/recuperar-recomendacoes" />',
@@ -216,10 +215,14 @@
 			      	    async:true, 
 			      	    success: function(produtos) {
 			      	    	recurandoRecomendacao = false
-			      	    	for ( var i = 0, l = produtos.length; i < l; i++ ) {
-			      	    		$( "#recomendacoes" ).append(replaceProduto(produtos[i], i));
+			      	    	if(produtos.length > 0){
+			      	    		$( "#recomendacoes" ).html('');
+			      	    		for ( var i = 0, l = produtos.length; i < l; i++ ) {
+				      	    		$( "#recomendacoes" ).append(replaceProduto(produtos[i], i));
+				      	    	}
+				      	    	$('[id^="rating-"]').barrating({ showSelectedRating:true });
+				      	    	$("#finalizar-formulario").show();
 			      	    	}
-			      	    	$('[id^="rating-"]').barrating({ showSelectedRating:true });
 			      	    },error: function(data) { 
 			      	    	recurandoRecomendacao = false
 			      	    	alert(data.statusText)
@@ -408,7 +411,7 @@
 					<footer>
 						<p style="display: none;" id="msgRespostasObrigatorias">Responda todas as quest&#245;es para prosseguir.</p>
 						<p><a id="hrefEnviarRespostas" href="javascript:void(0);" class="button style1 scrolly" onclick="javascript:salvarQuestionario();">Enviar Respostas!</a></p>
-						<p><a style="display: none;" id="hrefProsseguirAvaliacoes" href="#avaliacoes-inicio" class="button style1 scrolly" onmouseover='$("#avaliacoes-inicio").show();$("#recomendacoes").show();$("#finalizar-formulario").show();'>Seguir para as avalia&#231;&#245;es</a></p>
+						<p><a style="display: none;" id="hrefProsseguirAvaliacoes" href="#avaliacoes-inicio" class="button style1 scrolly" onmouseover='$("#avaliacoes-inicio").show();$("#recomendacoes").show();'>Seguir para as avalia&#231;&#245;es</a></p>
 					</footer>
 
 				</form>
@@ -432,7 +435,7 @@
 				<article id="por favor aguarde" class="container box style2">
 				  <section>
 				  <p>
-				  <img class="image" align="MIDDLE" src="/recommender-system/resources/overflow/images/carregando.gif" alt="">
+				  <img class="image" src="/recommender-system/resources/overflow/images/carregando.gif">
 				  </p>
 				  <p style="background-color: white;">Por favor, aguade... a recomendação esta sendo gerada! Caso demore mais do que 2 minutos, favor interromper o formulário e enviar e-mail para alan.prando@gmail.com.</p>
 				  </section>
