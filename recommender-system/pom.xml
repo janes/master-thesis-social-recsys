@@ -21,7 +21,8 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<mahout.version>0.9</mahout.version>
 		<guava.version>18.0</guava.version>
 		<commonsmath3.version>3.2</commonsmath3.version>
-	</properties>
+  		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 	
 	<dependencies>
 	
@@ -284,6 +285,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
  				<configuration>
 		        	<source>${java-version}</source>
 		        	<target>${java-version}</target>
+		        	<encoding>UTF-8</encoding>
  				</configuration>
  			</plugin>
  		</plugins>

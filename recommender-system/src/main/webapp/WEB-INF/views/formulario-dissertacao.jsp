@@ -9,6 +9,7 @@
 	<head>
 		<title>Big Data Recommender System</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta charset="utf-8"/>		
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<!--[if lte IE 8]><script src="<c:url value='/resources/overflow/css/ie/html5shiv.js' />"></script><![endif]-->
