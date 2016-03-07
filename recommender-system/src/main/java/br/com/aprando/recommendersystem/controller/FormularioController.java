@@ -152,9 +152,15 @@ public class FormularioController {
 			
 			System.setProperty("user.name", "vagrant"); 
 			Runtime rt = Runtime.getRuntime();
+//          PRODUCTION
             Process proc = rt.exec( 
 					new String[]{ "/home/azureuser/master-thesis-social-recsys/spark-1.4.1-bin-hadoop2.6/bin/spark-submit", "/home/azureuser/master-thesis-social-recsys/machine-learning-module/make_prediction.py", formBean.getId()} );
-            InputStream stderr = proc.getErrorStream();
+
+//          DEVELOPMENT			
+// 			Process proc = rt.exec( 
+//					new String[]{ "/vagrant/spark-1.6.0-bin-hadoop2.6/bin/spark-submit", "/vagrant/machine-learning-module/make_prediction.py", formBean.getId()} );
+
+			InputStream stderr = proc.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
             BufferedReader br = new BufferedReader(isr);
             String line = null;

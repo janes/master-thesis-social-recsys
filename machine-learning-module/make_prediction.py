@@ -10,6 +10,8 @@ from bson.objectid import ObjectId
 from pyspark import SparkConf, SparkContext
 from Classifier import Classifier
 from twython import Twython
+import facebook
+from langdetect import detect
 #from base import *
 # encoding=utf8  
 
@@ -237,30 +239,52 @@ def cosineSimilarity(record, idfsRDD, idfsRDD2, corpusNorms1, corpusNorms2):
     """
     vect1Rec = record[0][0]
     vect2Rec = record[0][1]
-    tokens = record[1]
-    s = sum((idfsRDD[vect1Rec][i]*idfsRDD2[vect2Rec][i] for i in tokens))
-    value = s/((corpusNorms1[vect1Rec])*(corpusNorms2[vect2Rec]))
     key = (vect1Rec, vect2Rec)
-    return (key, value)
+
+    try:
+        tokens = record[1]
+        s = sum((idfsRDD[vect1Rec][i]*idfsRDD2[vect2Rec][i] for i in tokens))
+        value = s/((corpusNorms1[vect1Rec])*(corpusNorms2[vect2Rec]))
+        return (key, value)
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
+    return (key, 0)
 
 def findPosts(user):
-    CONSUMER_KEY = 'p05WZVs4JivX4a0WSwFyMXXCo'
-    CONSUMER_SECRET = 'DghsY9Dxn2X8xAjdQKEvwBLtqsHNJabFz361pz2ZvRmAgXiPHB'
-    ACCESS_KEY = '167813147-LwEOQAqO6RCnK0GfIEXNeVOng93QHkW1iFuVjBUV'
-    ACCESS_SECRET = 'kpzp3quxTmVpSfWdgcyN5qbrPTmyoFArdvJeUC4Dfjtg1'
-
-    twitter = Twython(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_KEY,ACCESS_SECRET)
-    user_timeline = twitter.get_user_timeline(screen_name=user['twitterId'], count=100, include_retweets=False)
-    
     posts = []
-    for tweet in user_timeline:
-        tweet_utf = removeAccents(unicode(tweet['text'].encode('utf-8')))
-        tweet_id = unicode(str(tweet['id']))
-        if(tweet_id and tweet_utf):
-            print tweet_id + ' <======> ' + tweet_utf
-            posts.append((tweet_id, tweet_utf, u'Post', u'Twitter'))            
-    return posts
+    # TWITTER
+    if('twitterId' in user):
+        CONSUMER_KEY = 'p05WZVs4JivX4a0WSwFyMXXCo'
+        CONSUMER_SECRET = 'DghsY9Dxn2X8xAjdQKEvwBLtqsHNJabFz361pz2ZvRmAgXiPHB'
+        ACCESS_KEY = '167813147-LwEOQAqO6RCnK0GfIEXNeVOng93QHkW1iFuVjBUV'
+        ACCESS_SECRET = 'kpzp3quxTmVpSfWdgcyN5qbrPTmyoFArdvJeUC4Dfjtg1'
 
+        twitter = Twython(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_KEY,ACCESS_SECRET)
+        user_timeline = twitter.get_user_timeline(screen_name=user['twitterId'], count=100, include_retweets=False)
+    
+
+        for tweet in user_timeline:
+            tweet_utf = removeAccents(unicode(tweet['text'].encode('utf-8')))
+            if(detect(tweet_utf) == 'pt'):
+                tweet_id = unicode(str(tweet['id']))
+                if(tweet_id and tweet_utf):
+                    posts.append((tweet_id, tweet_utf, u'Post', u'Twitter'))            
+    # FACEBOOK                
+    if('facebookId' in user):
+        app_id = "704203256284579"
+        app_secret = "9a75ef350e4f9b24d8be454abf29ae68"
+        access_token = facebook.GraphAPI().get_app_access_token(app_id, app_secret)
+        graph = facebook.GraphAPI(access_token)
+        profile = graph.get_object(user['facebookId'])
+        f_posts = graph.get_connections(profile['id'], 'posts')
+
+        for f_post in f_posts['data']:
+            if 'message' in f_post and len(f_post['message']) > 10:
+                posts.append((f_post['id'], f_post['message'], u'Post', u'Facebook'))
+            if 'description' in f_post and len(f_post['description']) > 10:
+                posts.append((f_post['id'], f_post['description'], u'Post', u'Facebook'))
+
+    return posts
 
 def main(**kwargs):
     iduser = sys.argv[1]

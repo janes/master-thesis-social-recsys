@@ -127,39 +127,37 @@
 		      	$("#email").val(response.email);
 		      	$("#facebookId").val(response.id);
 		      	
-		      	salvarUsuario();
-		      	
 			    });
 			  }
 		  
 		  function salvarUsuario() {
+			  $("#msgFacebookObrigatorio").hide();
+			  
 	    	  var data = $('#usuarioForm').serialize();
-	    	  if($('#facebookId').val() || $('#twitterId').val()){
-		      	  var url = $('#usuarioForm').attr('action');
-		      	  $.ajax({
-		      	    url: url,
-		      	    data: data,
-		      	    dataType:'json',
-		      	    type:'POST', 
-		      	    async:false, 
-		      	    success: function(data) {
-		      	    	$("#id").val(data.id);
-		      	    	$("#idUsuarioQuestoes").val(data.id);
-		      	    	$("#idUsuarioAvaliacao").val(data.id);
-		      	    	if(data.twitterId != '' && data.facebookId != ''){
-		      	    		$("#hrefProsseguirQuestoes").show()
-		      	    	}else if(data.facebookId == ''){
-		      	    		$("#msgFacebookObrigatorio").show()
-		      	    	}else if(data.twitterId == ''){
-		      	    		$("#msgTwitter").show()
-		      	    	}
-		      	    	setInterval(recuperarRecomendacoes(), 10000)		      	    	
-		      	    },
-		      	    error: function(data) { 
-		      	    	alert(data.statusText)
-		    		}
-		      	  });
+	    	  if($('#facebookId').val().trim() == '' && $('#twitterId').val().trim() == ''){
+	    		  $("#msgFacebookObrigatorio").show();	
+	    		  return;
 	    	  }
+	    	  
+	      	  var url = $('#usuarioForm').attr('action');
+	      	  $.ajax({
+	      	    url: url,
+	      	    data: data,
+	      	    dataType:'json',
+	      	    type:'POST', 
+	      	    async:false, 
+	      	    success: function(data) {
+	      	    	$("#id").val(data.id);
+	      	    	$("#idUsuarioQuestoes").val(data.id);
+	      	    	$("#idUsuarioAvaliacao").val(data.id);
+	      	    	$("#questoes").show()
+	      	    	setInterval(recuperarRecomendacoes(), 10000)		      	    	
+	      	    },
+	      	    error: function(data) { 
+	      	    	alert(data.statusText)
+	    		}
+	      	  });
+	    	  
 		  }
 		  
 		  function salvarQuestionario() {
@@ -319,20 +317,21 @@
 					<h2>Pesquisa Cient&#237;fica </h2>
 				</header>
 				<p>
-				As redes sociais fazem parte da rotina das pessoas. <br />
-				Mas o que acontece com os dados compartilhados? Likes, posts, fotos... ? <br />
-				O que voc&#234; pensa sobre a utiliza&#231;&#227;o desses dados pelas empresas na web? <br />
+				Este formul&#225;rio faz parte do experimento da tese de mestrado de Alan Vidotti Prando.<br />
+				<b>T&#237;tulo:</b> "Um Sistema de Recomenda&#231;&#227;o para E-commerce utilizando redes sociais <br />
+				em ambiente Big Data".<br />
 				<br />
-				Esse trabalho de mestrado pretende estudar a viabilidade do uso dessas informa&#231;&#245;es<br />
-				sociais em e-commerces, com o objetivo de personalizar a experi&#234;ncia e satisfa&#231;&#227;o do usu&#225;rio.
+				Pretende-se observar o uso de informa&#231;&#245;es mineradas de redes sociais<br />
+				em e-commerces, com o objetivo de personalizar a experi&#234;ncia e satisfa&#231;&#227;o do usu&#225;rio.
 				<br />
 				Para isso, gostariamos da sua participa&#231;&#227;o no estudo, respondendo a um breve <br />
-				question&#225;rio (n&#227;o deve demorar mais do que 5 minutos).
+				question&#225;rio.<br />
 				<br />
+				<b>Tempo estimado:</b> 5 minutos.
 				</p>
 				
 				<footer>
-					<a href="#redes-sociais" class="button style2 scrolly" onmouseover='$("#redes-sociais").show()'>Quero Participar!</a>
+					<a href="#redes-sociais" class="button style2 scrolly" onmouseover='$("#redes-sociais").show()'>Prosseguir</a>
 					<!-- <a href="#o-projeto" class="button style2 scrolly">Mais sobre o projeto</a> -->
 				</footer>
 			</section>
@@ -372,7 +371,7 @@
 								<td align="center" width="50%">
 									<div class="3u">
 										<img class="image" src="<c:url value='/resources/overflow/images/flat-social-media-icons/twitter_2.png' />" alt="" title="Twitter" width="180" />
-										<input type="text" name="twitterId" id="twitterId" onblur="javascript:salvarUsuario();" 
+										<input type="text" name="twitterId" id="twitterId" 
 											style="border: 4px solid #F1B720; border-radius: 5px;  color: #333; font-size:14px; width: 180px"/>
 									</div>
 								</td>
@@ -380,9 +379,9 @@
 						</table>
 					</section>
 					<footer> 
-						<p style="display: none;" id="msgFacebookObrigatorio">O cadastro utilizando o Facebook &#233; obrigat&#243;rio para prosseguir.</p>
+						<p style="display: none;" id="msgFacebookObrigatorio">O cadastro utilizando o Facebookou ou Twitter &#233; obrigat&#243;rio para prosseguir.</p>
 						<p style="display: none;" id="msgTwitter">N&#227;o possui twitter? Tudo bem! Clique <a href="#questoes"  onmouseover='$("#questoes").show()'>aqui</a></p>
-						<a id="hrefProsseguirQuestoes" href="#questoes" class="button style1 scrolly" onmouseover='$("#questoes").show()' style="display: none">Seguir para as quest&#245;es!</a>
+						<a id="hrefProsseguirQuestoes" href="#questoes" class="button style1 scrolly" onclick='javascript:salvarUsuario();'>Seguir para as quest&#245;es!</a>
 					</footer>
 				</form>
 			</article>		
@@ -438,7 +437,7 @@
 				  <p>
 				  <img class="image" src="/recommender-system/resources/overflow/images/carregando.gif">
 				  </p>
-				  <p style="background-color: white;">Por favor, aguade... a recomenda&#231;&#227;o esta sendo gerada! Caso demore mais do que 2 minutos, favor interromper o formul&#225;rio e enviar e-mail para alan.prando@gmail.com.</p>
+				  <p style="background-color: white;">Por favor, aguade... a recomenda&#231;&#227;o esta sendo gerada!</p>
 				  </section>
 				</article>
 				</div>
