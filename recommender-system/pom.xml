@@ -22,6 +22,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 		<guava.version>18.0</guava.version>
 		<commonsmath3.version>3.2</commonsmath3.version>
   		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 	
 	<dependencies>
