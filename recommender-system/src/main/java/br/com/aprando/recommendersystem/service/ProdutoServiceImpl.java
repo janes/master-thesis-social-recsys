@@ -90,13 +90,20 @@ public class ProdutoServiceImpl implements ProdutoService {
 		}
 		Collections.sort(produtos, new CustomComparator());
 		
-		if(produtos.size() > 15)
-			produtos = produtos.subList(0, 15);
-		
+		int index = 0;
 		Set<Produto> retorno = new HashSet<>();
-		retorno.addAll(produtos);
-		for(Produto p : produtos)
-			System.out.println("PRODUTO " + p.getCosineSimilarity());
+		for(Produto p : produtos){
+			if(p.getDescricaoLonga() != null && !p.getDescricaoLonga().equals("")
+					 && p.getImage() != null && !p.getImage().trim().equals("")){
+				System.out.println("PRODUTO " + p.getCosineSimilarity());
+				p.getDescricaoCurta().replace("new WOW().init();", "");
+				retorno.add(p);
+				index++;
+				if(index > 15)
+					break;
+				
+			}
+		}
 		return retorno;	
 	}
 
