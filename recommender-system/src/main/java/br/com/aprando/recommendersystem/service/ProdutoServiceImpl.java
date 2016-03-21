@@ -96,7 +96,7 @@ public class ProdutoServiceImpl implements ProdutoService {
 			if(p.getDescricaoLonga() != null && !p.getDescricaoLonga().equals("")
 					 && p.getImage() != null && !p.getImage().trim().equals("")){
 				System.out.println("PRODUTO " + p.getCosineSimilarity());
-				p.getDescricaoCurta().replace("new WOW().init();", "");
+				p.getDescricaoLonga().replace("new WOW().init();", "");
 				retorno.add(p);
 				index++;
 				if(index > 15)
